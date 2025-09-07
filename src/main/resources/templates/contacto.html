@@ -1,15 +1,55 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Clínica Veterinaria</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Clínica Veterinaria</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/servicios">Servicios</a></li>
+            <li><a href="/productos">Productos</a></li>
+            <li><a href="/nosotros">Sobre Nosotros</a></li>
+            <li><a href="/contacto">Contacto</a></li>
+            <li><a href="/reserva" class="cta-button">Reserva tu Cita</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Contacto</h2>
+        <p>Puedes contactarnos a través de los siguientes medios:</p>
+        <ul>
+            <li><strong>Teléfono:</strong> 123-456-789</li>
+            <li><strong>Email:</strong> contacto@clinicavet.com</li>
+            <li><strong>Dirección:</strong> Calle Falsa 123, Ciudad</li>
+        </ul>
+        <p>O puedes rellenar el siguiente formulario:</p>
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="button">Enviar Mensaje</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Clínica Veterinaria. Todos los derechos reservados.</p>
+    </footer>
+</body>
 </html>

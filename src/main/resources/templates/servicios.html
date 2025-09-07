@@ -1,18 +1,30 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios</title>
+    <title>Servicios - Clínica Veterinaria</title>
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
     <header>
-        <h1>Servicios de la Clínica Veterinaria</h1>
+        <h1>Clínica Veterinaria</h1>
     </header>
 
-    <main>
+    <nav>
         <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/servicios">Servicios</a></li>
+            <li><a href="/productos">Productos</a></li>
+            <li><a href="/nosotros">Sobre Nosotros</a></li>
+            <li><a href="/contacto">Contacto</a></li>
+            <li><a href="/reserva" class="cta-button">Reserva tu Cita</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Nuestros Servicios</h2>
+        <ul class="item-list">
             <li>Consulta general</li>
             <li>Cirugía</li>
             <li>Vacunación</li>

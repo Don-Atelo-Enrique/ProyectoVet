@@ -1,31 +1,51 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserva tu Cita</title>
+    <title>Reserva tu Cita - Clínica Veterinaria</title>
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
     <header>
-        <h1>Reserva tu cita en la Clínica Veterinaria</h1>
+        <h1>Clínica Veterinaria</h1>
     </header>
 
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/servicios">Servicios</a></li>
+            <li><a href="/productos">Productos</a></li>
+            <li><a href="/nosotros">Sobre Nosotros</a></li>
+            <li><a href="/contacto">Contacto</a></li>
+            <li><a href="/reserva" class="cta-button">Reserva tu Cita</a></li>
+        </ul>
+    </nav>
+
     <main>
+        <h2>Reserva tu Cita</h2>
         <form action="/reserva" method="post">
-            <label for="nombreDueño">Nombre del Dueño:</label>
-            <input type="text" id="nombreDueño" name="nombreDueño" required><br><br>
+            <div class="form-group">
+                <label for="nombreDueño">Nombre del Dueño:</label>
+                <input type="text" id="nombreDueño" name="nombreDueño" required>
+            </div>
 
-            <label for="nombreMascota">Nombre de la Mascota:</label>
-            <input type="text" id="nombreMascota" name="nombreMascota" required><br><br>
+            <div class="form-group">
+                <label for="nombreMascota">Nombre de la Mascota:</label>
+                <input type="text" id="nombreMascota" name="nombreMascota" required>
+            </div>
 
-            <label for="fechaHora">Fecha y Hora de la Reserva:</label>
-            <input type="datetime-local" id="fechaHora" name="fechaHora" required><br><br>
+            <div class="form-group">
+                <label for="fechaHora">Fecha y Hora de la Reserva:</label>
+                <input type="datetime-local" id="fechaHora" name="fechaHora" required>
+            </div>
 
-            <label for="servicio">Servicio Solicitado:</label>
-            <input type="text" id="servicio" name="servicio" required><br><br>
+            <div class="form-group">
+                <label for="servicio">Servicio Solicitado:</label>
+                <input type="text" id="servicio" name="servicio" required>
+            </div>
 
-            <button type="submit">Crear Reserva</button>
+            <button type="submit" class="button">Crear Reserva</button>
         </form>
     </main>
 
