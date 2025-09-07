@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Confirmada</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>¡Reserva Confirmada!</h1>
+    </header>
+
+    <main>
+        <p>Gracias por reservar con nosotros. Tu cita está confirmada:</p>
+        <p><strong>Nombre del Dueño:</strong> [[${reserva.nombreDueño}]]</p>
+        <p><strong>Nombre de la Mascota:</strong> [[${reserva.nombreMascota}]]</p>
+        <p><strong>Fecha y Hora de la Reserva:</strong> [[${reserva.fechaHora}]]</p>
+        <p><strong>Servicio Solicitado:</strong> [[${reserva.servicio}]]</p>
+
+        <p>¡Te esperamos para cuidar de tu mascota!</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Clínica Veterinaria. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
