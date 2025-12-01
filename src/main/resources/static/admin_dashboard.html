@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Administrador</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            background-color: #f4f4f9;
+            overflow: hidden;
+        }
+
+        /* Fondo difuminado */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://plus.unsplash.com/premium_photo-1729111978333-8144a4c498dd?q=80&w=1527&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px); /* Difumina el fondo */
+            z-index: -1;
+        }
+
+        /* Contenedor principal (más pequeño) */
+        .container {
+            width: 60%; /* Reducido al 60% */
+            max-width: 900px; /* Tamaño máximo ajustado */
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            text-align: center;
+            margin-bottom: 30px; /* Espaciado en la parte inferior */
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Estilo para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 6px 12px; /* Botones más pequeños */
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e53935;
+        }
+
+        /* Alerta */
+        .alert {
+            color: white;
+            background-color: #4CAF50;
+            padding: 12px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+
+        .alert.error {
+            background-color: #f44336;
+        }
+
+        /* Formulario (más compacto) */
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 100%; /* Formulario en el 100% del contenedor */
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo del botón de cerrar sesión */
+        .logout-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Fondo difuminado -->
+<div class="background"></div>
+
+<!-- Contenedor principal -->
+<div class="container">
+    <h1>Dashboard del Administrador</h1>
+
+    <!-- Formulario para crear una reserva -->
+    <div class="form-container" id="formContainer">
+        <h3 id="formTitle">Crear Nueva Reserva</h3>
+        <form id="reservaForm">
+            <input type="text" id="nombreMascota" placeholder="Nombre de la mascota" required />
+            <input type="date" id="fecha" required />
+            <input type="time" id="hora" required />
+            <textarea id="mensaje" placeholder="Mensaje opcional"></textarea>
+            <button type="submit" id="submitButton">Crear Reserva</button>
+        </form>
+    </div>
+
+    <!-- Tabla de reservas -->
+    <table id="reservasTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre Mascota</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Mensaje</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Alerta -->
+    <div id="alertBox" class="alert"></div>
+
+    <!-- Botón de cerrar sesión -->
+    <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+</div>
+
+<script>
+    let editingReservaId = null;
+
+    function obtenerReservas() {
+        fetch('http://localhost:8080/admin/reservas/listar')
+            .then(response => response.json())
+            .then(reservas => {
+                const reservasTable = document.getElementById("reservasTable").getElementsByTagName('tbody')[0];
+                reservasTable.innerHTML = '';
+                reservas.forEach(reserva => {
+                    const row = reservasTable.insertRow();
+                    row.insertCell(0).textContent = reserva.id;
+                    row.insertCell(1).textContent = reserva.nombreMascota;
+                    row.insertCell(2).textContent = reserva.fecha;
+                    row.insertCell(3).textContent = reserva.hora;
+                    row.insertCell(4).textContent = reserva.mensaje;
+
+                    const actionCell = row.insertCell(5);
+                    actionCell.style.display = "flex";
+                    actionCell.style.gap = "10px";
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Eliminar";
+                    deleteButton.onclick = () => eliminarReserva(reserva.id);
+                    actionCell.appendChild(deleteButton);
+                    deleteButton.onmouseover = () => deleteButton.style.backgroundColor = "#c0392b";
+                    deleteButton.onmouseout = () => deleteButton.style.backgroundColor = "#e74c3c";
+
+                    const editButton = document.createElement("button");
+                    editButton.textContent = "Editar";
+                    editButton.onclick = () => editarReserva(reserva);
+                    actionCell.appendChild(editButton);
+                    editButton.style.backgroundColor = "#27ae60";
+                    editButton.onmouseover = () => editButton.style.backgroundColor = "#1e8449";
+                    editButton.onmouseout = () => editButton.style.backgroundColor = "#27ae60";
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function eliminarReserva(reservaId) {
+        fetch(`http://localhost:8080/admin/reservas/eliminar/${reservaId}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    mostrarAlerta("Reserva eliminada con éxito!");
+                    obtenerReservas();
+                } else {
+                    mostrarAlerta("Error al eliminar la reserva.", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarAlerta("Hubo un problema al eliminar la reserva.", "error");
+            });
+    }
+
+    function editarReserva(reserva) {
+        document.getElementById("nombreMascota").value = reserva.nombreMascota;
+        document.getElementById("fecha").value = reserva.fecha;
+        document.getElementById("hora").value = reserva.hora;
+        document.getElementById("mensaje").value = reserva.mensaje;
+        document.getElementById("formTitle").textContent = "Editar Reserva";
+        document.getElementById("submitButton").textContent = "Actualizar Reserva";
+        editingReservaId = reserva.id;
+    }
+
+    document.getElementById('reservaForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const nombreMascota = document.getElementById('nombreMascota').value;
+        const fecha = document.getElementById('fecha').value;
+        const hora = document.getElementById('hora').value;
+        const mensaje = document.getElementById('mensaje').value;
+
+        const reservaData = { nombreMascota, fecha, hora, mensaje };
+
+        if (editingReservaId === null) {
+            fetch('http://localhost:8080/admin/reservas/crear', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reservaData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    mostrarAlerta("Reserva creada con éxito!");
+                    obtenerReservas();
+                    document.getElementById('reservaForm').reset();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarAlerta("Hubo un problema al crear la reserva.", "error");
+            });
+        } else {
+            fetch(`http://localhost:8080/admin/reservas/editar/${editingReservaId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reservaData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    mostrarAlerta("Reserva actualizada con éxito!");
+                    obtenerReservas();
+                    editingReservaId = null;
+                    document.getElementById('reservaForm').reset();
+                    document.getElementById("formTitle").textContent = "Crear Nueva Reserva";
+                    document.getElementById("submitButton").textContent = "Crear Reserva";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarAlerta("Hubo un problema al actualizar la reserva.", "error");
+            });
+        }
+    });
+
+    function mostrarAlerta(message, type = "success") {
+        const alertBox = document.getElementById("alertBox");
+        alertBox.textContent = message;
+        alertBox.className = `alert ${type}`;
+        alertBox.style.display = "block";
+
+        setTimeout(() => {
+            alertBox.style.display = "none";
+        }, 3000);
+    }
+
+    function cerrarSesion() {
+        window.location.href = "/index.html"; // Redirige al inicio
+    }
+
+    window.onload = obtenerReservas;
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const fechaInput = document.getElementById("fecha");
+    const hoy = new Date();
+
+    // Formatea la fecha en formato YYYY-MM-DD
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+    const dd = String(hoy.getDate()).padStart(2, "0");
+    const fechaMinima = `${yyyy}-${mm}-${dd}`;
+
+    // Asigna el valor mínimo
+    fechaInput.min = fechaMinima;
+  });
+</script>
+</body>
+</html>
