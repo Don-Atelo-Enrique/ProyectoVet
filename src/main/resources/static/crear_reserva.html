@@ -133,7 +133,7 @@
       const alertBox = document.getElementById("alertBox");
       alertBox.style.display = "none";
 
-      fetch(`${window.location.origin}/reservas/crear`, {
+      fetch(`https://proyectovet.onrender.com/reservas/crear`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -148,7 +148,7 @@
               alertBox.style.display = "block";
 
               // 🔵 GENERAR PDF
-              return fetch(`${window.location.origin}/reservas/pdf-temporal`, {
+              return fetch(`https://proyectovet.onrender.com/reservas/pdf-temporal`, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
