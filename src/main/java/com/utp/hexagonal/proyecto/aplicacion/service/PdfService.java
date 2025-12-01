@@ -3,20 +3,17 @@ package com.utp.hexagonal.proyecto.aplicacion.service;
 import com.utp.hexagonal.proyecto.dominio.modelo.Reserva;
 import com.utp.hexagonal.proyecto.infraestructura.controller.AdminReservaController;
 import com.utp.hexagonal.proyecto.infraestructura.controller.ReservaController;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.spire.doc.*;
 import com.spire.doc.documents.*;
 import com.spire.doc.fields.TextRange;
 
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.time.LocalDate;
+import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 public class PdfService {
@@ -25,9 +22,18 @@ public class PdfService {
 
         System.out.println(">>> Generando PDF con Spire.Doc");
 
-        // 1. Cargar plantilla DOCX
+        // 1. Cargar plantilla DOCX desde resources/template
         Document document = new Document();
-        document.loadFromFile("C:/VetClinic/Plantilla/prueba.docx");
+
+        // Opción 1: Usando ClassPathResource de Spring
+        ClassPathResource resource = new ClassPathResource("template/prueba.docx");
+        InputStream inputStream = resource.getInputStream();
+        document.loadFromStream(inputStream, FileFormat.Docx);
+
+        // Opción 2 (alternativa): Usando ClassLoader directamente
+        // InputStream inputStream = getClass().getClassLoader()
+        //     .getResourceAsStream("template/prueba.docx");
+        // document.loadFromStream(inputStream, FileFormat.Docx);
 
         // 2. Obtener fecha actual
         LocalDateTime fechaHoraActual = LocalDateTime.now();
@@ -45,6 +51,8 @@ public class PdfService {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         document.saveToStream(baos, FileFormat.PDF);
 
+        // Cerrar recursos
+        inputStream.close();
         document.close();
 
         return baos.toByteArray();
