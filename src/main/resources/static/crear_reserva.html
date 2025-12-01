@@ -133,7 +133,7 @@
       const alertBox = document.getElementById("alertBox");
       alertBox.style.display = "none";
 
-      fetch('http://localhost:8080/reservas/crear', {
+      fetch(`${window.location.origin}/reservas/crear`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -148,7 +148,7 @@
               alertBox.style.display = "block";
 
               // 🔵 GENERAR PDF
-              return fetch('http://localhost:8080/reservas/pdf-temporal', {
+              return fetch(`${window.location.origin}/reservas/pdf-temporal`, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'

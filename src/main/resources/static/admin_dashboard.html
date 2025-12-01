@@ -196,7 +196,7 @@
     let editingReservaId = null;
 
     function obtenerReservas() {
-        fetch('http://localhost:8080/admin/reservas/listar')
+        fetch(`${window.location.origin}/admin/reservas/listar`)
             .then(response => response.json())
             .then(reservas => {
                 const reservasTable = document.getElementById("reservasTable").getElementsByTagName('tbody')[0];
@@ -232,7 +232,7 @@
     }
 
     function eliminarReserva(reservaId) {
-        fetch(`http://localhost:8080/admin/reservas/eliminar/${reservaId}`, { method: 'DELETE' })
+        fetch(`${window.location.origin}/admin/reservas/eliminar/${reservaId}`, { method: 'DELETE' })
             .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
@@ -269,7 +269,7 @@
         const reservaData = { nombreMascota, fecha, hora, mensaje };
 
         if (editingReservaId === null) {
-            fetch('http://localhost:8080/admin/reservas/crear', {
+            fetch(`${window.location.origin}/admin/reservas/crear`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reservaData)
@@ -287,7 +287,7 @@
                 mostrarAlerta("Hubo un problema al crear la reserva.", "error");
             });
         } else {
-            fetch(`http://localhost:8080/admin/reservas/editar/${editingReservaId}`, {
+            fetch(`${window.location.origin}/admin/reservas/editar/${editingReservaId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reservaData)

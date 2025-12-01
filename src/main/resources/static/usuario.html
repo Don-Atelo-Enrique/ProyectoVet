@@ -165,7 +165,7 @@
     const alertBox = document.getElementById("alertBox");
     alertBox.style.display = "none";
 
-    fetch('http://localhost:8080/usuarios/registro', {
+    fetch(`${window.location.origin}usuarios/registro`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
